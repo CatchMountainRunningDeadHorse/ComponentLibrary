@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <img id="img" src="https://img12.iqilu.com/10339/clue/202405/29/68ec17f5-9621-461f-ad22-a6820a3f9cf5.jpg">
+
+    <script>
+        var imgSrc = 'https://img12.iqilu.com/10339/clue/202405/29/68ec17f5-9621-461f-ad22-a6820a3f9cf5.jpg'
+        var name = "测试图片"
+
+        const img = document.querySelector('#img')
+        console.log('!!!!!!!!!!!!!!!!!!!!!',img)
+        img.addEventListener('click',()=>{
+            downloadPicture(imgSrc,name)
+        })
+        function downloadPicture(imgSrc, name) {
+            const image = new Image()
+            // 解决跨域 Canvas 污染问题
+            image.setAttribute('crossOrigin', 'anonymous')
+            image.onload = () => {
+                const canvas = document.createElement('canvas')
+                canvas.width = image.width
+                canvas.height = image.height
+                const context = canvas.getContext('2d')
+                context.drawImage(image, 0, 0, image.width, image.height)
+                canvas.toBlob((blob) => {
+                    const url = URL.createObjectURL(blob)
+                    const a = document.createElement('a')
+                    a.download = name || 'photo'
+                    a.href = url
+                    a.click()
+                    a.remove()
+                    URL.revokeObjectURL(url)
+                })
+            }
+            image.src = imgSrc
+        }
+    </script>
+</body>
+
+</html>
