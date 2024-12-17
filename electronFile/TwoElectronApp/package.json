@@ -1,0 +1,19 @@
+{
+  "name": "twoelectronapp",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --watch main.js --exec npm run build",
+    "build": "electron ."
+  },
+  "author": "贾兵",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "nodemon": "^3.1.7"
+  },
+  "devDependencies": {
+    "electron": "^32.2.0"
+  }
+}

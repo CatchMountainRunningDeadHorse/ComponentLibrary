@@ -1,0 +1,613 @@
+接口地址：http://doc.xuexiluxian.cn/
+
+账号：testapi
+
+密码：123456
+
+
+
+# 一、创建项目
+
+	1.2 官网网址：https://evite.netlify.app/ 
+	
+	1.3 安装步骤
+	
+		npx degit alex8088/electron-vite-boilerplate electron-app
+		cd electron-app
+	
+		npm install
+		npm run dev
+
+vue版本：vue3
+
+构建工具：vite
+
+框架类型：Electron
+
+JS语法：TypeScript
+
+
+
+# 二、安装路由 和 路由二次封装
+
+2.1 安装路由：npm install vue-router -S
+
+	1. 新建：router/index.ts
+	
+	2. router/index.ts写入内容
+	
+		import { createRouter, createWebHashHistory } from "vue-router";
+		export default createRouter({
+			history: createWebHashHistory(),//hash模式
+		    routes:[{ path: "/", component: Login }]//路由配置规则数组
+		})
+	
+	3. main.ts中use一下router
+	
+		use(router)
+		
+	4. 创建对应路由的.vue文件
+
+2.2 路由二次封装
+
+疑问：为什么路由二次封装？
+
+解答：router文件中在写项目中包含：路由表、导航守卫等等内容，假设路由表特别多 或 导航守卫内容特别多，代码则很难维护和阅读，所以二次封装路由是为了方便后期维护和管理。
+
+操作流程：
+
+```
+1. index.ts
+  import { createRouter, createWebHashHistory } from "vue-router";
+  import { AppRoutes } from '@router/routes'
+  import {  beforeEach  , afterEach  } from '@router/guards'
+
+  const AppRouter = createRouter({
+      history: createWebHashHistory(),
+      routes:AppRoutes
+  })
+
+  AppRouter.beforeEach(beforeEach)
+  AppRouter.afterEach(afterEach)
+
+  export default AppRouter;
+
+2. 新建routes.ts ： 放入路由表
+	export const AppRoutes = [
+      { 
+          path: "/",
+          name:'layout',
+          component: ()=>import('@layout/index.vue') 
+      },
+      { 
+          path: "/login", 
+          name:'登录',
+          component: ()=>import('@views/login/Login.vue')
+      },
+  ];
+
+3. 新建guards.ts ：放入导航守卫
+	//全局前置导航守卫
+	export const beforeEach = async ( to )=>{
+		//...
+	}
+	//全局后置导航守卫
+  export const afterEach = ()=>{
+		//...
+  }
+
+```
+
+
+
+# 三、安装store（pinia） 和  持久化存储
+
+3.1 下载安装
+
+```
+npm install pinia -S
+```
+
+3.2 main.ts引入
+
+```
+import { createPinia } from 'pinia'
+app.use(createPinia())
+```
+
+3.3 新建目录：store/index.ts
+
+```
+import { defineStore } from 'pinia'
+export const useStore = defineStore('storeId', {
+  state: () => {
+    return {
+      counter: 0,
+    }
+  },
+  getters:{},
+  actions:{}
+})
+```
+
+3.4 Vuex和Pinia的区别
+
+Vuex和pinia的区别有很多，例如：pinia没有mutations和modules，那么vuex的modules是为了区分和管理小store模块的内容，但是pinia没有modules所以无法直接管理，但是为了项目可能store比较多，为了更好的管理store可以模拟实现来完成。
+
+3.5 增加全局store
+
+```
+修改：index.ts
+内容为：store/index.ts主要引入其他store  //模拟实现vuex的modules
+```
+
+3.6 持久化存储
+
+```
+下载安装：npm install pinia-plugin-persist
+```
+
+```
+//main.ts
+
+//状态管理
+import { createPinia } from 'pinia'
+import piniaPluginPersist from 'pinia-plugin-persist'
+const store = createPinia()
+store.use(piniaPluginPersist)
+
+app.use( store );
+```
+
+```
+//useUserStore.ts
+
+import { defineStore } from 'pinia'
+
+export const useUserStore = defineStore('userId', {
+    state: () => {
+        return {
+        }
+    },
+    getters:{},
+    actions:{},
+    persist: {
+      enabled: true, //开启数据缓存
+      strategies: [
+        {
+          storage: localStorage,//默认走session
+          paths: ['rolePerm', 'permissions']
+        }
+      ]
+    }
+})
+```
+
+
+
+# 四、路径别名
+
+配置文件：electron.vite.config.ts
+
+```
+export default defineConfig({
+  renderer: {
+    resolve: {
+      alias: {
+        '@renderer': resolve('src/renderer/src'),
+        //增加路径别名
+      }
+    },
+    plugins: [vue()]
+  }
+})
+```
+
+
+
+# 五、配置代理 和 请求二次封装
+
+5.1 配置代理 ：electron.vite.config.ts
+
+```
+export default defineConfig({
+  main: {},
+  preload: {},
+  renderer: {
+    resolve: {
+      alias: {
+        '@renderer': resolve('src/renderer/src'),
+      }
+    },
+    server:{
+      "proxy":{
+        "/api":{
+          target:'http://uat.crm.xuexiluxian.cn',
+          changeOrigin:true,
+          rewrite: path =>  path.replace(/^\/api/,'')
+        }
+      }
+    }
+  }
+})
+```
+
+5.2 请求二次封装：utils/request.ts
+
+先下载axios：npm install axios
+
+```
+import axios from 'axios';
+
+const request = axios.create({
+    baseURL: '/api'
+});
+
+// 添加请求拦截器
+request.interceptors.request.use(function (config) {
+    return config;
+}, function (error) {
+    // 对请求错误做些什么
+    return Promise.reject(error);
+});
+
+// 添加响应拦截器
+request.interceptors.response.use(function (response) {
+    return response;
+}, function (error) {
+    return Promise.reject(error);
+});
+
+export default request;
+```
+
+##### 后面课程中，会单独分装get和post。
+
+5.3 api文件管理
+
+新建：api/login.ts
+
+```
+import request from "@utils/request";
+
+//用户登录
+export const loginByJson = ( data )=>{
+    return request({
+    	url:'/u/loginByJson',
+    	method:'请求方式'
+			//...
+    })
+}
+```
+
+
+
+# 六、安装使用Element Plus
+
+6.1 安装
+
+```
+npm install element-plus --save
+```
+
+6.2 按需导入
+
+```
+npm install -D unplugin-vue-components unplugin-auto-import
+```
+
+6.3 electron.vite.config.ts
+
+```
+//element
+import AutoImport from 'unplugin-auto-import/vite'
+import Components from 'unplugin-vue-components/vite'
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+
+export default defineConfig({
+  renderer: {
+    resolve: {
+      alias: {
+        '@renderer': resolve('src/renderer/src'),
+      }
+    },
+    server:{
+      "proxy":{
+        "/api":{
+          target:'http://uat.crm.xuexiluxian.cn',
+          changeOrigin:true,
+          rewrite: path =>  path.replace(/^\/api/,'')
+        }
+      }
+    },
+    plugins: [
+      vue(),
+      AutoImport({
+        resolvers: [ElementPlusResolver()],
+      }),
+      Components({
+        resolvers: [ElementPlusResolver()],
+      })
+    ]
+  }
+})
+```
+
+
+
+# 七、登录页布局
+
+7.1 左侧布局
+
+```
+<template>
+    <div class="login_bg">
+        <!--左边-->
+        <div class="login_adv">
+            <div class="login_adv__title">
+                <h2>小鹿线</h2>
+                <h4>客户关系管理系统</h4>
+                <p>让业务在线更高效，加速企业数字化升级。</p>
+            </div>
+            <div class="login_adv__mask"></div>
+            <div class="login_adv__imgage">
+                <img src="../assets/images/data.png" width="100%">
+            </div>
+            <div class="login_adv__bottom">
+                © 小鹿线客户管理系统 1.0.11
+            </div>
+        </div>
+    </div>
+</template>
+
+<style scoped>
+.login_bg {
+  width: 100vw;
+  height: 100vh;
+  background: #fff;
+  display: flex;
+}
+.login_adv {
+    background-image: url('../assets/images/auth_banner.jpg');
+    width: 40%;
+    position: relative;
+}
+.login_adv__title {
+  color: #fff;
+  padding: 40px;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  z-index: 2;
+}
+.login_adv__title h2 {
+  font-size: 40px;
+}
+
+.login_adv__title h4 {
+  font-size: 18px;
+  margin-top: 10px;
+  font-weight: normal;
+}
+
+.login_adv__title p {
+  font-size: 14px;
+  margin-top: 10px;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.login_adv__title div {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.login_adv__imgage{
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  bottom: 80px;
+  padding: 40px;
+  z-index: 3;
+}
+
+.login_adv__imgage img{
+  width: 100%;
+}
+
+.login_adv__bottom {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  color: #fff;
+  padding: 0 40px 40px 40px;
+  background-image: linear-gradient(transparent, #000);
+  z-index: 3;
+}
+
+.login_adv__mask {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+</style>
+```
+
+7.2 右侧布局
+
+```
+<template>
+    <div class="login">
+        <!--左侧-->
+        <div class="login_adv">
+            <div class="login_adv_title">
+                <h2>小鹿线</h2>
+                <h4>客户关系管理系统</h4>
+                <p>让业务在线更高效，加速企业数字化升级。</p>
+            </div>
+            <div class="login_adv_mask"></div>
+
+            <div class="login_adv_imgage">
+                <img src="../assets/images/data.png" width="100%">
+            </div>
+            <div class="login_adv_bottom">
+                © 小鹿线客户管理系统 1.0.11
+            </div>
+        </div>
+        <!--右侧-->
+        <div class="login-main">
+            <div class="login-form">
+
+                <div class="login-header">
+                    <div class="login-img">
+                        <img src="../assets/images/logo.png" alt="">
+                        <label>小鹿线客户管理系统</label>
+                    </div>
+                </div>
+                <el-tabs>
+                    <el-tab-pane label="账号登录" lazy>User</el-tab-pane>
+                    <el-tab-pane label="手机号登录" lazy>Config</el-tab-pane>
+                </el-tabs>
+                <template v-if='true'>
+                    <el-divider>其他登录方式</el-divider>
+                    <div class="login-oauth">
+                        <!--微信按钮-->
+                        <el-button type="success" circle  size="large">
+                            <el-icon size="large">
+                               <ChatDotRound />
+                            </el-icon>
+                        </el-button>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+</template>
+
+<style scoped>
+.login{
+    width:100vw;
+    height: 100vh;
+    background-color: #fff;
+    display: flex;
+}
+.login_adv{
+    background: url('../assets/images/auth_banner.jpg') no-repeat;
+    width:40%;
+    position: relative;
+}
+.login_adv_title{
+    position: absolute;
+    top:0;
+    left:0;
+    right:0;
+    z-index: 2;
+    padding:40px;
+    color:#fff;
+}
+.login_adv_title h2{
+    font-size: 40px;
+}
+.login_adv_title h4{
+    font-size: 18px;
+    margin-top: 10px;
+}
+.login_adv_title p{
+    font-size: 14px;
+    margin-top: 10px;
+    line-height: 1.8;
+    color: rgb(255,255,255,.6);
+}
+.login_adv_imgage{
+    position: absolute;
+    left:0px;
+    right:0px;
+    bottom:80px;
+    padding:40px;
+    z-index: 3;
+}
+.login_adv_imgage img{
+    width: 100%;
+    height: 100%;
+}
+.login_adv_bottom{
+    position: absolute;
+    left:0px;
+    right:0px;
+    bottom:0px;
+    color:#fff;
+    padding:0 40px 40px 40px;
+}
+.login_adv_mask{
+    position: absolute;
+    left:0px;
+    top:0px;
+    right:0px;
+    bottom:0px;
+    background:rgba(0, 0, 0,.5);
+    z-index: 1;
+}
+
+.login-main{
+    flex:1;
+    display: flex;
+    overflow: auto;
+}
+.login-form{
+    width:400px;
+    margin: auto;
+    padding:80px 0 0 0;
+}
+.login-header{
+    margin-bottom: 40px;
+}
+.login-header .login-img{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.login-header .login-img img{
+    width:40px;
+    height: 40px;
+    vertical-align: bottom;
+    margin-right:10px;
+}
+.login-header .login-img label{
+    font-size:26px;
+    font-weight: bold;
+}
+.login-oauth{
+    display: flex;
+    justify-content: space-around;
+}
+</style>
+```
+
+7.3 下载引入icon
+
+安装
+
+```
+npm install @element-plus/icons-vue
+```
+
+main.ts引入
+
+```
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+	app.component(key, component)
+}
+```
+
+
+
+
+

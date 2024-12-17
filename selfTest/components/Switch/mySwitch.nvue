@@ -1,0 +1,117 @@
+<template>
+	<view class="switch-wrapper" :style="outerBox">
+		<view class="switch" :style="innerBox" @click="toggleSwitch">
+			<view :style="other" style="display: flex;position: relative;">
+				<text v-if="isShowText" :class="[value?'text-left':'text-right']" :style="other" style="margin: 0 5px;">
+					{{ value ? activeText : inactiveText }}</text>
+				<text v-else :class="[value?'text-left':'text-right']" :style="other" style="margin: 0 5px;"></text>
+				<view class="switch-inner" :style="switchCircle"></view>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+	export default {
+		props: {
+			activeText: {
+				type: String,
+				default: '开启'
+			},
+			inactiveText: {
+				type: String,
+				default: '关闭'
+			},
+			value: {
+				type: Boolean,
+				default: false
+			},
+			size: {
+				type: Number,
+				default: 30
+			},
+			isShowText:{
+				type:Boolean,
+				default:true
+			}
+		},
+		computed: {
+			outerBox() {
+				return {
+					height: `${this.size}px`,
+					lineHeight: `${this.size}px`
+				}
+			},
+			innerBox() {
+				return {
+					height: `${this.size}px`,
+					width: `${this.switchWidth}px`,
+					lineHeight: `${this.size}px`,
+					backgroundColor: this.value ? '#4caf50' : '#ccc',
+					borderRadius: `${this.size / 2}px`
+				}
+			},
+			switchWidth() {
+				return this.len * this.size * 1 / 2 + this.size + 10
+			},
+			len() {
+				return Math.max(this.activeText.length, this.inactiveText.length)
+			},
+			switchCircle() {
+				const translateX = this.value ? (this.len * this.size * 1 / 2 + 15) : 5
+				return {
+					width: `${this.size - 10}px`,
+					height: `${this.size - 10}px`,
+					transform: `translateX(${translateX}px)`
+				}
+			},
+			other() {
+				return {
+					height: `${this.size}px`,
+					lineHeight: `${this.size}px`,
+					width: '100%',
+					fontSize: `${this.size * 1 / 2}px`,
+					alignItems:'center'
+				}
+			}
+		},
+		methods: {
+			toggleSwitch() {
+				this.$emit("input", !this.value); // 触发 父组件更新
+				this.$emit("change", !this.value); // 触发 change 事件
+			}
+		}
+	};
+</script>
+
+<style scoped>
+	.switch-wrapper {
+		/* display: flex;
+		align-items: center;
+		justify-content: center; */
+	}
+
+	.switch {
+		display: flex;
+		transition: background-color 0.3s;
+		cursor: pointer;
+	}
+
+	.switch-inner {
+		display: flex;
+		position: absolute;
+		align-items: center;
+		justify-content: center;
+		border-radius: 50%;
+		background-color: white;
+		transition: transform 0.3s;
+	}
+
+	.text-right {
+		text-align: right;
+	}
+
+	.text-left {
+		text-align: left;
+	}
+</style>

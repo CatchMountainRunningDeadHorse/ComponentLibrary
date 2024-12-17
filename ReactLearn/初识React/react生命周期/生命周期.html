@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高阶函数_函数柯里化</title>
+</head>
+<body>
+    <div id="test1"></div>
+    <script src="../../17之前版本/react.development.js"></script>
+    <script src="../../17之前版本/react-dom.development.js"></script>
+    <script src="../../17之前版本/prop-types.js"></script>
+    <script src="../../17之前版本/babel.min.js"></script>
+
+    <script type="text/babel">
+        class Login extends React.Component{
+            state = {opacity:1}
+            death = ()=> {
+                ReactDOM.unmountComponentAtNode(document.getElementById('test1'))
+            }
+            componentDidMount(){
+                this.timer = setInterval(()=>{
+                    let {opacity} = this.state
+                    opacity -= 0.1
+                    if(opacity <= 0) opacity = 1
+                    this.setState({opacity})
+                },200)
+            }
+
+            componentWillUnmount(){
+                clearInterval(this.timer)
+            }
+            render(){
+                console.log('render');
+                
+                return (
+                    <div>
+                        <h2 style={{opacity:this.state.opacity}}>React学不会，怎么办？</h2>    
+                        <button onClick={this.death}>不活了？</button>
+                    </div>
+                )
+            }
+        }
+        ReactDOM.render(<Login/>,document.getElementById('test1'))
+    </script>
+</body>
+</html>

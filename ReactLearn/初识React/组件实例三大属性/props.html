@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>state</title>
+</head>
+<body>
+    <div id="test"></div>
+    <script src="../../17之前版本/react.development.js"></script>
+    <script src="../../17之前版本/react-dom.development.js"></script>
+    <script src="../../17之前版本/babel.min.js"></script>
+
+    <script type="text/babel">
+        class Demo extends React.Component{
+            render(){
+                const { name,age,sex } = this.props.person
+                return (
+                    <ul>
+                        <li>姓名：{name}</li>
+                        <li>性别：{sex}</li>
+                        <li>年龄：{age}</li>
+                    </ul>
+                )
+            }
+        }
+        const person = {
+            name:'tom',
+            age:18,
+            sex:'男'
+        }
+        ReactDOM.render(<Demo person={person}/>,document.getElementById('test'))
+    </script>
+</body>
+</html>

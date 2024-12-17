@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高阶函数_函数柯里化</title>
+</head>
+<body>
+    <div id="test1"></div>
+    <script src="../../17之前版本/react.development.js"></script>
+    <script src="../../17之前版本/react-dom.development.js"></script>
+    <script src="../../17之前版本/prop-types.js"></script>
+    <script src="../../17之前版本/babel.min.js"></script>
+
+    <script type="text/babel">
+        class Login extends React.Component{
+            state = {username:'',password:''}
+            render(){
+                return (
+                    <form onSubmit={this.handleSubmit}> 
+                        用户名：<input onChange={this.saveFormData('username')} type="text" name="username"/>
+                        密码：<input onChange={this.saveFormData('password')} type="password" name="password"/>
+                        <button>登录</button>
+                    </form>
+                )
+            }
+            handleSubmit=(event)=>{
+                event.preventDefault()
+                const {username,password} = this.state
+                alert(`你输入的用户名是：${username},你输入的密码是${password}`)
+            }
+            saveFormData = (props) => {
+                return (event)=>{
+                    this.setState({[props]:event.target.value})
+                }
+            }
+        }
+        ReactDOM.render(<Login/>,document.getElementById('test1'))
+    </script>
+</body>
+</html>

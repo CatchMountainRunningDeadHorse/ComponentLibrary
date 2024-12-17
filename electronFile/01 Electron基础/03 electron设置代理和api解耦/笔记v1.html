@@ -1,0 +1,34 @@
+一、electron.vite.config.ts配置
+
+  export default defineConfig({
+    main: {
+      ...
+    },
+    preload: {
+      ...
+    },
+    renderer: {
+      resolve: {
+        alias: {
+          ...
+        }
+      },
+      server:{
+        "proxy":{
+          "/api":{
+            target:'http://uat.crm.xuexiluxian.cn',
+            changeOrigin:true,
+            rewrite: path =>  path.replace(/^\/api/,'')
+          }
+        }
+      },
+      plugins: [
+        ...
+      ]
+    }
+  })
+
+二、打开调适
+
+  窗口.webContents.openDevTools();
+

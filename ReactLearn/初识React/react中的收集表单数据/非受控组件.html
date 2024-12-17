@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>非受控组件</title>
+</head>
+<body>
+    <div id="test1"></div>
+    <script src="../../17之前版本/react.development.js"></script>
+    <script src="../../17之前版本/react-dom.development.js"></script>
+    <script src="../../17之前版本/prop-types.js"></script>
+    <script src="../../17之前版本/babel.min.js"></script>
+
+    <script type="text/babel">
+        class Login extends React.Component{
+            render(){
+                return (
+                    <form onSubmit={this.handleSubmit}> 
+                        用户名：<input ref={this.nameRef} type="text" name="username"/>
+                        密码：<input ref={this.psdRef} type="password" name="password"/>
+                        <button>登录</button>
+                    </form>
+                )
+            }
+
+            nameRef = React.createRef()
+            psdRef = React.createRef()
+
+            handleSubmit=(event)=>{
+                event.preventDefault()
+                const {nameRef,psdRef} = this
+                alert(`你输入的用户名是：${nameRef.current.value},你输入的密码是${psdRef.current.value}`)
+            }
+        }
+        ReactDOM.render(<Login/>,document.getElementById('test1'))
+    </script>
+</body>
+</html>

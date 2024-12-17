@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>refs</title>
+</head>
+<body>
+    <div id="test1"></div>
+    <script src="../../17之前版本/react.development.js"></script>
+    <script src="../../17之前版本/react-dom.development.js"></script>
+    <script src="../../17之前版本/prop-types.js"></script>
+    <script src="../../17之前版本/babel.min.js"></script>
+
+    <script type="text/babel">
+        class Demo extends React.Component{
+            // React.createRef调用后可以返回应该容器，该容器可以存储被ref所标识的节点
+            myRef = React.createRef()
+            showData=()=>{
+                const { current } = this.myRef
+                alert(current.value)
+            }
+            render(){
+                return (
+                    <div> 
+                        <input ref={this.myRef} type="text" />
+                        <button onClick={this.showData}>点我提示</button>
+                    </div>
+                )
+            }
+        }
+        ReactDOM.render(<Demo/>,document.getElementById('test1'))
+    </script>
+</body>
+</html>

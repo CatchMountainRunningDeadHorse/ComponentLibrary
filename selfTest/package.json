@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "copy-webpack-plugin": "^5.1.1",
+    "sortablejs": "^1.15.6",
+    "vuedraggable": "^2.24.3"
+  }
+}

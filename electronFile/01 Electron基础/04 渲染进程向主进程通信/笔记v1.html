@@ -1,0 +1,15 @@
+一、渲染进程 向 主进程通信
+
+  渲染进程：
+
+    electron.ipcRenderer.invoke('名称',{ 传值 } )
+
+
+  主进程：
+
+    import { app, shell, BrowserWindow , ipcMain } from 'electron'
+    ipcMain.handle('名称',(event,渲染进程向主进程传递的参数)=>{
+
+    })
+
+

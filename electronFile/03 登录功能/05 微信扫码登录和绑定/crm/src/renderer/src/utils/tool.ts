@@ -1,0 +1,61 @@
+const tool = {};
+
+//全屏设置
+tool.screen = ( element )=>{
+    var isFull=!!(document.webkitIsFullScreen || document.mozFullScreen || 
+        document.msFullscreenElement || document.fullscreenElement);
+
+    if(  isFull  ){//缩小   
+
+        if (document.exitFullscreen) {
+	        document.exitFullscreen();
+	    } else if (document.msExitFullscreen) {
+	        document.msExitFullscreen();
+	    } else if (document.mozCancelFullScreen) {
+	        document.mozCancelFullScreen();
+	    } else if (document.webkitExitFullscreen) {
+	        document.webkitExitFullscreen();
+	    }
+
+    }else{//放大
+
+        if (element.requestFullscreen) {
+	        element.requestFullscreen();
+	    } else if (element.msRequestFullscreen) {
+	        element.msRequestFullscreen();
+	    } else if (element.mozRequestFullScreen) {
+	        element.mozRequestFullScreen();
+	    } else if (element.webkitRequestFullscreen) {
+	        element.webkitRequestFullscreen();
+	    }
+
+    }
+
+}
+
+
+
+//时间戳转换为标准时间
+tool.dateFormat = ( date:String , fmt='yyyy-MM-dd hh:mm:ss'  )=>{
+
+	date = new Date( date );
+
+	var o = {
+		'M+': date.getMonth() + 1, // 月份
+		'd+': date.getDate(), // 日
+		'h+': date.getHours(), // 小时
+		'm+': date.getMinutes(), // 分
+		's+': date.getSeconds(), // 秒
+		'q+': Math.floor((date.getMonth() + 3) / 3), // 季度
+		'S': date.getMilliseconds() // 毫秒	
+	}
+
+	if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
+		for (var k in o) {
+		if (new RegExp('(' + k + ')').test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
+	}
+	
+	return fmt;
+}	
+
+export default tool;

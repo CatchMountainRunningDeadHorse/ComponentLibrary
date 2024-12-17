@@ -1,0 +1,39 @@
+一、electron-app项目，目录结构说明
+
+	build ==》打包操作，例如：打包后的应用图标，.env环境变量的配置等等
+	resources ==〉资料目录，例如：放入图片，有点类似于vue-cli中的publick目录
+	src
+		|main      ==>操作主进程内容，例如：创建窗口等
+		|preload   ==>预加载，本身渲染进程是不可以使用electron等api的，通过preload预加载就可以使用了。
+		|renderer  ==>操作渲染进程，就是应用中的内容。
+
+	electron.vite.config.ts  ==》这个和vue中的vite.config.js ｜｜ vue.config.js类似
+
+	***其他目录文件随着课程的更新，会不断给大家讲述，包括打包项目时我们还会新增很多文件。
+
+二、下载pinia 
+
+	2.1 官网：https://pinia.web3doc.top/
+
+	2.2  下载：npm install pinia -S
+
+	2.3 main.ts引入
+
+		import { createPinia } from 'pinia'
+		app.use(createPinia())
+
+	2.4 新建目录：store/index.js
+
+		import { defineStore } from 'pinia'
+
+		export const useStore = defineStore('storeId', {
+		  state: () => {
+		    return {
+		      counter: 0,
+		    }
+		  },
+		  getters:{},
+		  actions:{}
+		})
+
+***关于pinia的二次封装和持久化存储，后续会讲述
