@@ -5,18 +5,28 @@
     "pages/profile/index"
   ],
   "window": {
-    "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "Weixin",
-    "navigationBarBackgroundColor": "#ffffff"
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "新版小程序",
+    "navigationBarBackgroundColor": "#1296df"
   },
   "tabBar": {
-    "list": [{
-      "pagePath": "pages/payment/index",
-      "text": "支付"
-    }, {
-      "pagePath": "pages/profile/index",
-      "text": "我的"
-    }]
+    "list": [
+      {
+        "pagePath": "pages/payment/index",
+        "text": "支付",
+        "iconPath": "/assets/tabbar/pay.png",
+        "selectedIconPath": "/assets/tabbar/pay-active.png"
+      },
+      {
+        "pagePath": "pages/profile/index",
+        "text": "我的",
+        "iconPath": "/assets/tabbar/pro.png",
+        "selectedIconPath": "/assets/tabbar/pro-active.png"
+      }
+    ],
+    "selectedColor": "#1296df",
+    "borderStyle": "white",
+    "backgroundColor": "#efefef"
   },
   "style": "v2",
   "componentFramework": "glass-easel",

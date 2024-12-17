@@ -1,2 +1,6 @@
 <!--pages/payment/index.wxml-->
-<text>pages/payment/index.wxml</text>
+<text class="text-color">pages/payment/index.wxml</text>
+
+<text class="iconfont icon-zhifubao"></text>
+
+<view class="bg-image"></view>
