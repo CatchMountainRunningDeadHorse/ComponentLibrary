@@ -1,0 +1,25 @@
+{
+  "entryPagePath": "pages/profile/index",
+  "pages": [
+    "pages/payment/index",
+    "pages/profile/index"
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "Weixin",
+    "navigationBarBackgroundColor": "#ffffff"
+  },
+  "tabBar": {
+    "list": [{
+      "pagePath": "pages/payment/index",
+      "text": "支付"
+    }, {
+      "pagePath": "pages/profile/index",
+      "text": "我的"
+    }]
+  },
+  "style": "v2",
+  "componentFramework": "glass-easel",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}
