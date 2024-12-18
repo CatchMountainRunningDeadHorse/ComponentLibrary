@@ -2,7 +2,8 @@
   "entryPagePath": "pages/profile/index",
   "pages": [
     "pages/payment/index",
-    "pages/profile/index"
+    "pages/profile/index",
+    "pages/login/index"
   ],
   "window": {
     "navigationBarTextStyle": "white",

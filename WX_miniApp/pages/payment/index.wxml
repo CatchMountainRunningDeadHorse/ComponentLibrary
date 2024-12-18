@@ -3,4 +3,11 @@
 
 <text class="iconfont icon-zhifubao"></text>
 
-<view class="bg-image"></view>
+<view class="bg-image">{{fruits[0].name}}</view>
+<view style="display:flex;flex-direction:column;">
+  <view style="margin: 20px 0;padding: 20px;">你好啊</view>
+  <!-- <view style="height: 1px;"></view> -->
+  <view style="margin: 20px 0;padding: 20px;">你好啊</view>
+</view>
+
+<button type="warn" plain size="mini" bind:tap="sendRequest">测试发送请求</button>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .triangle-up {
+            width: 0;
+            height: 0;
+            border-left: 50px solid transparent;
+            border-right: 50px solid transparent;
+            border-bottom: 100px solid #3498db;
+            /* 设置颜色 */
+        }
+
+        .triangle-down {
+            width: 0;
+            height: 0;
+            border-left: 50px solid transparent;
+            border-right: 50px solid transparent;
+            border-top: 100px solid #e74c3c;
+            /* 设置颜色 */
+        }
+
+        .triangle-left {
+            width: 0;
+            height: 0;
+            border-top: 50px solid transparent;
+            border-bottom: 50px solid transparent;
+            border-right: 100px solid #2ecc71;
+            /* 设置颜色 */
+        }
+
+        .triangle-right {
+            width: 0;
+            height: 0;
+            border-top: 50px solid transparent;
+            border-bottom: 50px solid transparent;
+            border-left: 100px solid #f1c40f;
+            /* 设置颜色 */
+        }
+
+        .trapezoid {
+            width: 100px;
+            height: 0;
+            border-left: 25px solid transparent;
+            border-right: 25px solid transparent;
+            border-bottom: 50px solid #9b59b6;
+            /* 设置颜色 */
+        }
+
+        .diamond {
+            width: 0;
+            height: 0;
+            border: 50px solid transparent;
+            border-top: 50px solid #1abc9c;
+            border-bottom: 50px solid #1abc9c;
+            transform: rotate(45deg);
+        }
+        .equal-sides {
+            width: 50px; /* 菱形的宽度 */
+            height: 100px; /* 菱形的高度 */
+            background-color: #3498db;
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+          }
+          
+    </style>
+</head>
+
+<body>
+    <!-- 向上的三角形 -->
+    <div class="triangle-up"></div>
+    <!--  向下的三角形 -->
+    <div class="triangle-down"></div>
+    <!-- 向左的三角形 -->
+    <div class="triangle-left"></div>
+    <!-- 向右的三角形 -->
+    <div class="triangle-right"></div>
+    <!-- 四边形切角（梯形） -->
+    <div class="trapezoid"></div>
+    <!-- 菱形 -->
+    <div class="diamond"></div>
+    <div class="equal-sides"></div>
+
+</body>
+
+</html>

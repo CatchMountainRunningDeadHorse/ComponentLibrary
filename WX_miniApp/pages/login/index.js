@@ -1,14 +1,11 @@
-// pages/payment/index.js
-import { getData,getData1 } from '../../https/api'
+// pages/login/index.js
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    fruits: [
-      { id: 1, name: '💕🍋🍅🍊' }
-    ]
+
   },
 
   /**
@@ -31,18 +28,7 @@ Page({
   onShow() {
 
   },
-  async sendRequest() {
-    // const res = await instance.request({
-    //   url:'/mall-api/index/findBanner',
-    //   method:'GET'
-    // })
 
-    // const res = await getData()
-    const res = await getData1().catch((err)=>{
-      console.log('33333333333333333333',err)
-    })
-    console.log('222222222222222', res)
-  },
   /**
    * 生命周期函数--监听页面隐藏
    */

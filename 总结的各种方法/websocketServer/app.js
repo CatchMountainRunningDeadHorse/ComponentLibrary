@@ -14,7 +14,7 @@ wss.on('connection', (client) => {
     setInterval(() => {
         const timestamp = new Date().getTime()
         const data = {
-            data: {
+            // data: {
                 "command": "data_report",
                 "timestamp": timestamp, // 时间戳，精确到毫秒
                 "data": {
@@ -25,7 +25,7 @@ wss.on('connection', (client) => {
                     "gps_status": "1",// gps状态（gps在04、05、4B状态时为正常，其它状态为异常）：0-异常，1-正常
                     "velocity": 0 //速度
                 }
-            }
+            // }
         }
         client.send(JSON.stringify(data))
     }, 2000)
