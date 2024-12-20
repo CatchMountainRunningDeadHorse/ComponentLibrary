@@ -3,7 +3,8 @@
   "pages": [
     "pages/payment/index",
     "pages/profile/index",
-    "pages/login/index"
+    "pages/login/index",
+    "pages/upload/index"
   ],
   "window": {
     "navigationBarTextStyle": "white",
@@ -21,6 +22,18 @@
       {
         "pagePath": "pages/profile/index",
         "text": "我的",
+        "iconPath": "/assets/tabbar/pro.png",
+        "selectedIconPath": "/assets/tabbar/pro-active.png"
+      },
+      {
+        "pagePath": "pages/login/index",
+        "text": "登录",
+        "iconPath": "/assets/tabbar/pro.png",
+        "selectedIconPath": "/assets/tabbar/pro-active.png"
+      },
+      {
+        "pagePath": "pages/upload/index",
+        "text": "上传",
         "iconPath": "/assets/tabbar/pro.png",
         "selectedIconPath": "/assets/tabbar/pro-active.png"
       }

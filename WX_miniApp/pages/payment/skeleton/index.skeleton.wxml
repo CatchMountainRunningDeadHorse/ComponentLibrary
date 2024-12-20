@@ -1,0 +1,29 @@
+<!--
+此文件为开发者工具生成，生成时间: 2024/12/19下午2:58:08
+使用方法：
+在 D:\个人测试代码\WX_miniApp\pages\payment\index.wxml 引入模板
+
+```
+<import src="index.skeleton.wxml"/>
+<template is="skeleton" wx:if="{{loading}}" />
+```
+
+在 D:\个人测试代码\WX_miniApp\pages\payment\index.wxss 中引入样式
+```
+@import "./index.skeleton.wxss";
+```
+
+更多详细信息可以参考文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/skeleton.html
+-->
+<template name="skeleton">
+  <view class="sk-container">
+    <text class="text-color sk-transparent sk-text-14-2857-979 sk-text">pages/payment/index.wxml</text>
+    <text class="iconfont icon-zhifubao sk-pseudo sk-pseudo-circle"></text>
+    <view class="bg-image sk-transparent sk-text-14-2857-461 sk-text">💕🍋🍅🍊</view>
+    <view style="display:flex;flex-direction:column;">
+      <view style="margin: 20px 0;padding: 20px;" class="sk-transparent sk-text-14-2857-978 sk-text">你好啊</view>
+      <view style="margin: 20px 0;padding: 20px;" class="sk-transparent sk-text-14-2857-430 sk-text">你好啊</view>
+    </view>
+    <button plain="true" size="mini" type="warn" class="sk-transparent sk-button sk-pseudo sk-pseudo-circle">测试发送请求</button>
+  </view>
+</template>

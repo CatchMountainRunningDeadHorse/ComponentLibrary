@@ -1,8 +1,9 @@
 import WxRequest from './request'
-import { toast,modal } from './extendApi'
+import { toast, modal } from '../utils/extendApi'
+import { env } from '../utils/env'
 
 const instance = new WxRequest({
-  baseUrl: 'https://gmall-prod.atguigu.cn/mall-api',
+  baseUrl: env.baseUrl,
   timeout: 30000,
 })
 
@@ -25,7 +26,7 @@ instance.interceptors.response = async (response) => {
   //对服务器响应的数据做点什么...
   const { isSuccess, data } = response
   if (!isSuccess) {
-    wx.showToast({
+    toast({
       title: '网络异常请重试',
       icon: 'error'
     })
@@ -47,7 +48,7 @@ instance.interceptors.response = async (response) => {
       if (res) {
         //清除之前失效的 token ，同时要清除本地存储的全部信息
         wx.clearStorageSync()
-        wx.navigateTo({
+        wx.switchTab({
           url: '/pages/login/index',
         })
       }
@@ -59,12 +60,5 @@ instance.interceptors.response = async (response) => {
       return Promise.reject(response)
   }
 }
-export const getData = async (data = {}, config = {}) => {
-  const res = await instance.get('/index/findBanner', data, config)
-  return res
-}
 
-export const getData1 = async (data = {}, config = {}) => {
-  const res = await instance.get('/cart/getCartList', data, config)
-  return res
-}
+export { instance }

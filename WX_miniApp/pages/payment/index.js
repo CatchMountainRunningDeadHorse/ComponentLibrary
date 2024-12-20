@@ -1,5 +1,5 @@
 // pages/payment/index.js
-import { getData,getData1 } from '../../https/api'
+import { getData, getData1,promiseAll } from '../../api/index'
 Page({
 
   /**
@@ -8,7 +8,8 @@ Page({
   data: {
     fruits: [
       { id: 1, name: '💕🍋🍅🍊' }
-    ]
+    ],
+    loading:true
   },
 
   /**
@@ -37,11 +38,30 @@ Page({
     //   method:'GET'
     // })
 
-    // const res = await getData()
-    const res = await getData1().catch((err)=>{
+    const res = await getData(null).catch((err)=>{
       console.log('33333333333333333333',err)
     })
-    console.log('222222222222222', res)
+    this.setData({
+      loading:false
+    })
+    // const res = await getData1().catch((err)=>{
+    //   console.log('33333333333333333333',err)
+    // })
+
+    //
+    // await getData()
+    // await getData1()
+    // await getData()
+    // await getData1()
+
+    //使用promise.all同时发起多个请求
+    // const res = await Promise.all([getData(),getData(),getData(),getData()])
+    // const res = await promiseAll([getData(),getData(),getData(),getData(),getData(),getData(),getData(),getData(),getData()])
+    // for(let i=0;i<res[0].length;i++){
+    //   const aaa = await res[0][i]
+    //   console.log('1111111111111', aaa)
+    // }
+    console.log('2222222222222222',res);
   },
   /**
    * 生命周期函数--监听页面隐藏

@@ -1,13 +1,20 @@
 <!--pages/payment/index.wxml-->
-<text class="text-color">pages/payment/index.wxml</text>
+<!-- 引入骨架屏 -->
+<import src="./skeleton/index.skeleton.wxml"></import>
+<!-- 使用骨架屏 -->
+<template is="skeleton" wx:if="{{ loading }}" />
 
-<text class="iconfont icon-zhifubao"></text>
+<block v-else>
+  <text class="text-color">pages/payment/index.wxml</text>
 
-<view class="bg-image">{{fruits[0].name}}</view>
-<view style="display:flex;flex-direction:column;">
-  <view style="margin: 20px 0;padding: 20px;">你好啊</view>
-  <!-- <view style="height: 1px;"></view> -->
-  <view style="margin: 20px 0;padding: 20px;">你好啊</view>
-</view>
+  <text class="iconfont icon-zhifubao"></text>
 
-<button type="warn" plain size="mini" bind:tap="sendRequest">测试发送请求</button>
+  <view class="bg-image">{{fruits[0].name}}</view>
+  <view style="display:flex;flex-direction:column;">
+    <view style="margin: 20px 0;padding: 20px;">你好啊</view>
+    <!-- <view style="height: 1px;"></view> -->
+    <view style="margin: 20px 0;padding: 20px;">你好啊</view>
+  </view>
+
+  <button type="warn" plain size="mini" bind:tap="sendRequest">测试发送请求</button>
+</block>

@@ -10,6 +10,7 @@ export default class WxRequest {
       "Content-type": "application/json",  //数据的交互格式
     },
     timeout: 30000,  //默认的超时时长，小程序默认的超时时长是1分钟
+    isLoading: true,  //控制是否使用默认的loading，默认值是true，表示使用默认loading
   }
 
   //定义拦截器对象
@@ -23,17 +24,34 @@ export default class WxRequest {
     response: (response) => response
   }
 
+  //定义数组队列
+  //初始值是一个空数组，用来存储请求队列，存储请求标识
+  queue = []
+
   constructor(parmas = {}) {
     this.defaults = Object.assign({}, this.defaults, parmas)
   }
 
 
   request(options) {
+    //如果有新的请求就清除上一次的定时器
+    this.timerId && clearTimeout(this.timerId)
+
     //需要先合并完整的请求地址（baseUrl + url)
     options.url = this.defaults.baseUrl + options.url
 
     //合并请求参数
     options = { ...this.defaults, ...options }
+
+    if (options.isLoading) {
+      //判断queue队列是否为空，如果是空，就显示loading
+      //如果不是空，就不显示loading，不调用 wx.showLoading()
+      this.queue.length === 0 && wx.showLoading()
+      //然后立即向queue队列中添加请求标识
+      //每个标识代表一个请求，标识是自定义的
+      this.queue.push('request')
+    }
+
 
     //在请求发送之前，调用请求拦截器，新增或修改请求参数
     options = this.interceptors.request(options)
@@ -63,6 +81,24 @@ export default class WxRequest {
           //一般在网络出现异常时（网络超时），就会执行fail
           const mergeErr = Object.assign({}, err, { config: options, isSuccess: false })
           reject(this.interceptors.response(mergeErr))
+        },
+        //接口调用结束的回调函数（调用成功、失败都会执行）
+        complete: () => {
+          if (options.isLoading) {
+            //每次从 queue 中删除一个标识
+            this.queue.pop()
+
+            this.queue.length === 0 && this.queue.push('request')
+
+            this.timerId = setTimeout(() => {
+              this.queue.pop()
+              //在删除标识以后，需要判断目前queue队列是否为空
+              //如果是空，说明 并发请求 或者 单个请求 完成了
+              //就需要隐藏 loading 调用 wx.hideLoading()
+              this.queue.length === 0 && wx.hideLoading()
+              clearTimeout(this.timerId)
+            }, 1)
+          }
         }
       })
     })
@@ -88,6 +124,11 @@ export default class WxRequest {
   //封装 put 实例方法
   put(url, data = {}, config = {}) {
     return this.request(Object.assign({ url, data, method: 'PUT' }, config))
+  }
+
+  //upload 实例方法，用来对wx.uploadFile 进行封装
+  upload(url,filePath,name='file',config={}){
+    return this.request(Object.assign({url,filePath,name,method:'UPLOAD'},config))
   }
 }
 
